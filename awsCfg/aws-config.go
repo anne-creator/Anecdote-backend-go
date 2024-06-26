@@ -1,6 +1,10 @@
 // Description: This file contains the AWSConfig struct and the awsConfig function.
-// @returns: AWSConfig struct{} a session and service clients for DynamoDB and S3}
-package main
+// @returns:
+// AWSConfig struct{
+// a session
+// DynamoDB client
+// S3}
+package awsCfg
 
 import (
 	"fmt"
@@ -24,16 +28,8 @@ type AWSConfig struct {
 	S3Client  *s3.S3
 }
 
-func awsConfig() (*AWSConfig, error) {
-	// // Load environment variables
-	// accessKeyID := os.Getenv("aws_access_key_id")
-	// secretAccessKey := os.Getenv("aws_secret_access_key")
-
-	// if accessKeyID == "" || secretAccessKey == "" {
-	// 	log.Fatalf("Environment variables MY_AWS_ACCESS_KEY and MY_AWS_SECRET_KEY must be set")
-	// }
-
-	// fmt.Println(accessKeyID)
+func NewAwsConfig() (*AWSConfig, error) {
+	//the default credentials and region was in .aws/credentials
 
 	// Create a new session using the specified credentials and region
 	sess, err := session.NewSession(&aws.Config{
@@ -51,4 +47,17 @@ func awsConfig() (*AWSConfig, error) {
 		DocClient: dynamodb.New(sess),
 		S3Client:  s3.New(sess),
 	}, nil
+}
+
+// ListBuckets lists the S3 buckets
+func (cfg *AWSConfig) ListBuckets() { //
+	result, err := cfg.S3Client.ListBuckets(nil)
+	if err != nil {
+		log.Fatalf("Unable to list buckets, %v", err)
+	}
+
+	fmt.Println("Buckets:")
+	for _, b := range result.Buckets {
+		fmt.Printf("* %s created on %s\n", aws.StringValue(b.Name), aws.TimeValue(b.CreationDate))
+	}
 }
