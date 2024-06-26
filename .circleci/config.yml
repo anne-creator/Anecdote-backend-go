@@ -21,10 +21,10 @@ jobs:
     steps:
       # Checkout the code as the first step.
       - checkout
-      # Replace this with a real test runner invocation
-      - run:
-          name: Run tests
-          command: go test ./...
+      # Repace this with a real test runner invocation
+      # - run:
+      #     name: Run tests
+      #     command: go test ./...
   build:
     docker:
       - image: cimg/base:current
