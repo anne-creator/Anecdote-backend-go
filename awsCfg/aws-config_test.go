@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestAWSConfig(t *testing.T) {
+func TestNewAwsConfig(t *testing.T) {
 	// Call the awsConfig function
 	config, err := NewAwsConfig()
 	if err != nil {
